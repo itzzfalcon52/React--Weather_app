@@ -68,7 +68,7 @@ const Home = () => {
 
         {/* Cards Container */}
         <motion.div
-          className="grid md:grid-cols-2 gap-6 w-full max-w-3xl"
+          className="grid md:grid-cols-2 gap-6 w-full "
           variants={containerVariants}
           initial="hidden"
           animate="visible"
