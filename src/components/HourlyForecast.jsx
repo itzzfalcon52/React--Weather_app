@@ -58,7 +58,7 @@ function HourlyForecast() {
   );
 
   return (
-    <div className="bg-gray-700 col-start-6 col-end-8 row-span-5 -translate-x-28 h-full max-sm:translate-x-0 max-sm:h-128 max-sm:p-2 max-sm:mb-24">
+    <div className="bg-gray-700 col-start-6 col-end-8 row-span-5 row-start-2 -translate-x-28 h-full max-sm:translate-x-0 max-sm:h-128 max-sm:p-2 max-sm:mb-24">
       <div className="container flex flex-col min-h-0 h-full ">
         <div className="header p-2 flex justify-between items-center  shrink-0">
           <p className="text-xl text-white font-bricolage font-bold">

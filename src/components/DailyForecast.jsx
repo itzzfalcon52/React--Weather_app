@@ -4,7 +4,7 @@ import DailyForecastElement from "./DailyForecastElement";
 function DailyForecast() {
   const { weather, loading, error, convertedWeather } = UseWeather();
   return (
-    <div className=" row-start-4 row-span-2  col-span-4 max-sm:mb-6 ">
+    <div className=" row-start-5 row-span-2  col-span-4 max-sm:mb-6 ">
       <p className="text-3xl text-white font-bricolage font-medium ml-4">
         Daily Forecast
       </p>

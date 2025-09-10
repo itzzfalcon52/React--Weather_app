@@ -24,7 +24,7 @@ function Search() {
     [setCity]
   );
   return (
-    <div className="search mt-12 flex justify-center items-center max-sm:flex-col max-sm:justify-between max-sm:mx-2  ">
+    <div className="search  flex justify-center items-center max-sm:flex-col max-sm:justify-between max-sm:mx-2 row-start-1 row-span-1 col-span-7 ">
       <div className="relative basis-128 max-sm:basis-0 max-sm:mb-2 max-sm:w-full ">
         <span className="absolute top-0 left-0 m-0.5 py-2">
           <img

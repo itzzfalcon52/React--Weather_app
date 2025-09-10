@@ -128,7 +128,7 @@ function WeatherCard() {
   const current = weather?.current;
 
   return (
-    <div className="col-span-4  row-span-2 row-start-1 max-sm:mt-4 ">
+    <div className="col-span-4  row-span-2 row-start-2 max-sm:mt-4 ">
       <div className="weather-card w-full h-full rounded-2xl m-2 bg-cover bg-[url('/assets/images/bg-today-large.svg')] flex justify-between items-center max-sm:m-0 max-sm:flex-col  ">
         {loading ? (
           // 🔄 Loader inside the card

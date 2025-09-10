@@ -1,20 +1,22 @@
-import Header from "./components/Header";
-import Search from "./components/Search";
-import Main from "./components/Main";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { UnitsProvider } from "./contexts/UnitsContext";
-import Units from "./components/Units";
 import { WeatherProvider } from "./contexts/WeatherContext";
+import SearchWeather from "./pages/SearchWeather";
+import Home from "./pages/Home";
+import WeatherCompare from "./pages/WeatherCompare";
 
 export default function App() {
   return (
     <div className="bg-Neutral-900 h-screen w-screen overflow-auto">
       <UnitsProvider>
         <WeatherProvider>
-          <Header>
-            <Units />
-          </Header>
-          <Search />
-          <Main />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/search" element={<SearchWeather />} />
+              <Route path="/compare" element={<WeatherCompare />} />
+            </Routes>
+          </BrowserRouter>
         </WeatherProvider>
       </UnitsProvider>
     </div>

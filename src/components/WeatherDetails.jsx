@@ -66,7 +66,7 @@ function WeatherDetails() {
   }, [convertedWeather, weather, index, temperature]);
 
   return (
-    <div className="col-span-4  row-span-1 row-start-3 mt-4 ml-2  max-sm:ml-0 max-sm:mt-8 max-sm:mb-12 ">
+    <div className="col-span-4  row-span-1 row-start-4 mt-4 ml-2  max-sm:ml-0 max-sm:mt-8 max-sm:mb-12 ">
       <div className="weather-details w-full h-full flex justify-around items-stretch max-sm:grid max-sm:grid-cols-2 max-sm:grid-rows-2 max-sm:gap-x-2 max-sm:gap-y-6  ">
         <WeatherComp label="Feels Like" value={values.feelsLike} unit="°" />
         <WeatherComp label="Humidity" value={values.humidity} unit="%" />
