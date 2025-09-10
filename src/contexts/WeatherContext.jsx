@@ -119,12 +119,14 @@ function WeatherProvider({ children }) {
       if (precipitation === "mm") {
         converted.hourly = {
           ...converted.hourly,
-          precipitation: data?.hourly?.precipitation?.map((p) => p * 25.4),
+          precipitation: data?.hourly?.precipitation?.map((p) =>
+            (p * 25.4).toFixed(2)
+          ),
         };
         converted.daily = {
           ...converted.daily,
-          precipitation_sum: data?.daily?.precipitation_sum?.map(
-            (p) => p * 25.4
+          precipitation_sum: data?.daily?.precipitation_sum?.map((p) =>
+            (p * 25.4).toFixed(2)
           ),
         };
       }
