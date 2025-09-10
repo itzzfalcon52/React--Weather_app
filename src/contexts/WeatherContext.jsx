@@ -51,7 +51,8 @@ function WeatherProvider({ children }) {
         daily: data.daily,
       };
     } catch (err) {
-      console.error(err);
+      setError("Network Error");
+      throw err;
     }
   }
   const handleConversion = useCallback(
