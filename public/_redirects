@@ -1,0 +1,5 @@
+ Handle client-side routing
+/*    /index.html   200
+
+# Optional: Handle API routes differently
+/api/*  https://your-api-domain.com/:splat  200
