@@ -1,3 +1,5 @@
+import { UseWeather } from "../contexts/WeatherContext";
+
 function handleTime(timeISO) {
   const date = new Date(timeISO);
   return date.toLocaleTimeString([], {
@@ -102,15 +104,30 @@ function getWeatherEmoji(code) {
 }
 
 function HourlyList({ temp, weatherCode, time }) {
+  const { weather } = UseWeather();
   return (
-    <li className="flex justify-between items-center h-full bg-gray-800 rounded-md mb-2 mx-2">
+    <li
+      className={`flex justify-between items-center h-full rounded-md mb-2 mx-2 ${
+        weather?.current?.is_day === 1 ? " bg-blue-400" : "bg-gray-800"
+      }`}
+    >
       <span className="h-full w-full flex-1">
         {getWeatherEmoji(weatherCode)}
       </span>
-      <span className="flex-2 font-bricolage text-white ">
+      <span
+        className={`flex-2 font-bricolage  ${
+          weather?.current?.is_day === 1 ? "text-gray-800" : "text-white"
+        }`}
+      >
         {handleTime(time)}
       </span>
-      <span className="flex-1 font-bricolage text-xl text-white">{temp}</span>
+      <span
+        className={`flex-1 font-bricolage text-xl ${
+          weather?.current?.is_day === 1 ? "text-gray-800" : "text-white"
+        } `}
+      >
+        {temp}
+      </span>
     </li>
   );
 }

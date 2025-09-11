@@ -1,3 +1,5 @@
+import { UseWeather } from "../contexts/WeatherContext";
+
 function findingDay(iSOString) {
   //console.log(iSOString);
   const date = new Date(iSOString);
@@ -110,17 +112,34 @@ function getWeatherEmoji(code) {
 }
 
 function DailyForecastElement({ time, tempMax, tempMin, weatherCode, error }) {
+  const { weather } = UseWeather();
   return (
-    <div className="flex-1 bg-gray-700 rounded-xl mr-2  ">
-      <div className="text-xl font-bricolage font-medium text-white flex justify-center">
+    <div
+      className={`flex-1 rounded-xl mr-2  ${
+        weather?.current?.is_day === 1 ? " bg-blue-300" : "bg-gray-700"
+      }`}
+    >
+      <div
+        className={`text-xl font-bricolage  font-medium flex justify-center ${
+          weather?.current?.is_day === 1 ? " text-gray-800" : "text-white"
+        }`}
+      >
         {findingDay(time).slice(0, 3)}
       </div>
       <div className="">{getWeatherEmoji(weatherCode)}</div>
       <div className="flex justify-between items-centre">
-        <p className="font-bricolage font-bold text-white text-md p-2">
+        <p
+          className={`font-bricolage font-bold text-md p-2 ${
+            weather?.current?.is_day === 1 ? " text-gray-800" : "text-white"
+          }`}
+        >
           {!error ? `${tempMin}°` : String(error)}
         </p>
-        <p className="font-bricolage font-bold text-white text-md p-2">
+        <p
+          className={`font-bricolage font-bold text-md p-2 ${
+            weather?.current?.is_day === 1 ? " text-gray-800" : "text-white"
+          }`}
+        >
           {!error ? `${tempMax}°` : String(error)}
         </p>
       </div>

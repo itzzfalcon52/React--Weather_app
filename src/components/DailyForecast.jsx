@@ -5,7 +5,13 @@ function DailyForecast() {
   const { weather, loadingWeather, error, convertedWeather } = UseWeather();
   return (
     <div className=" row-start-5 row-span-2  col-span-4 max-sm:mb-6 ">
-      <p className="text-3xl text-white font-bricolage font-medium ml-4">
+      <p
+        className={`text-3xl font-bricolage font-medium ml-4 ${
+          weather?.current?.is_day === 1
+            ? " text-gray-800 font-bold"
+            : "text-white"
+        }`}
+      >
         Daily Forecast
       </p>
       {loadingWeather && (
@@ -13,7 +19,9 @@ function DailyForecast() {
           {Array.from({ length: 7 }).map((_, i) => (
             <div
               key={i}
-              className="flex-1 bg-gray-700 rounded-xl mr-2 h-32 animate-pulse"
+              className={`flex-1 rounded-xl mr-2 h-32 animate-pulse ${
+                weather?.current?.is_day === 1 ? "bg-blue-300" : "bg-gray-700"
+              }`}
             ></div>
           ))}
         </div>

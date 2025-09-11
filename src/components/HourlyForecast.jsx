@@ -58,15 +58,27 @@ function HourlyForecast() {
   );
 
   return (
-    <div className="bg-gray-700 col-start-6 col-end-8 row-span-5 row-start-2 -translate-x-28 h-full max-sm:translate-x-0 max-sm:h-128 max-sm:p-2 max-sm:mb-24">
+    <div
+      className={` col-start-6 col-end-8 row-span-5 row-start-2 -translate-x-32 h-full max-sm:translate-x-0 max-sm:h-128 max-sm:p-2 max-sm:mb-24  ${
+        weather?.current?.is_day === 1 ? " bg-blue-300" : "bg-gray-700"
+      }`}
+    >
       <div className="container flex flex-col min-h-0 h-full ">
         <div className="header p-2 flex justify-between items-center  shrink-0">
-          <p className="text-xl text-white font-bricolage font-bold">
+          <p
+            className={`text-xlfont-bricolage font-bold   ${
+              weather?.current?.is_day === 1 ? " text-gray-800" : "text-white"
+            } `}
+          >
             Hourly Forecasts
           </p>
           <select
             name="days"
-            className="text-white bg-gray-800 p-2 rounded-md"
+            className={` p-2 rounded-md  ${
+              weather?.current?.is_day === 1
+                ? " text-gray-800 bg-blue-400"
+                : "text-white bg-gray-800"
+            }`}
             value={day}
             onChange={(e) => setDay(e.target.value)}
           >
@@ -85,7 +97,11 @@ function HourlyForecast() {
           <ul className="content flex flex-col flex-1    pr-2 items-stretch ">
             {Array.from({ length: 7 }).map((_, i) => (
               <li
-                className=" flex-1 p-10  bg-gray-800 rounded-md mb-2 mx-2 animate-pulse"
+                className={` flex-1 p-10  rounded-md mb-2 mx-2 animate-pulse  ${
+                  weather?.current?.is_day === 1
+                    ? " bg-blue-500"
+                    : "bg-gray-800"
+                }`}
                 key={i}
               ></li>
             ))}

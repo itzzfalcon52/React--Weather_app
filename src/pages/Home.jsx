@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Cloud, MapPin, BarChart3, ArrowRight, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
 
 const Home = () => {
   const containerVariants = {

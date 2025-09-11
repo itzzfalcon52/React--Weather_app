@@ -11,11 +11,17 @@ function Units() {
     handleSelected,
     handleDefault,
   } = UseUnits();
+  const { weather } = UseWeather();
 
   return (
-    <div className="relative inline-block text-left z-100 ">
+    <div className="relative inline-block text-left z-100">
+      {/* Trigger Button */}
       <button
-        className="inline-flex w-full justify-center rounded-md bg-gray-700 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-600"
+        className={`inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium transition ${
+          weather?.current?.is_day === 1
+            ? "bg-blue-300 text-gray-800 hover:bg-blue-400"
+            : "bg-gray-700 text-white shadow-sm hover:bg-gray-600"
+        }`}
         onClick={handleShow}
       >
         Units
@@ -35,70 +41,156 @@ function Units() {
         </svg>
       </button>
 
+      {/* Dropdown */}
       <div
-        className={`  ${
+        className={`${
           !show ? "hidden" : ""
-        } absolute  right-0 mt-2 w-56 origin-top-right rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none `}
+        } absolute right-0 mt-2 w-56 origin-top-right rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
+          weather?.current?.is_day === 1
+            ? "bg-blue-400 text-gray-800"
+            : "bg-gray-800 text-white"
+        }`}
       >
         <div className="py-1">
+          {/* Default Switch */}
           <div
-            className="px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 cursor-pointer flex justify-between items-center"
+            className={`px-4 py-2 text-sm cursor-pointer flex justify-between items-center ${
+              weather?.current?.is_day === 1
+                ? "hover:bg-blue-500 text-gray-800"
+                : "text-gray-300 hover:bg-gray-700"
+            }`}
             onClick={handleDefault}
           >
-            Switch to Imperial
-            {temperature === "°C" &&
-              windSpeed === "mph" &&
-              precipitation === "in" && <span>✅</span>}
+            <span>Switch to Imperial</span>
+            <span className="w-4 h-4 flex items-center justify-center">
+              {temperature === "°C" &&
+                windSpeed === "mph" &&
+                precipitation === "in" && (
+                  <img
+                    className="w-4 h-4"
+                    src="/assets/images/icon-checkmark.svg"
+                    alt="selected"
+                  />
+                )}
+            </span>
           </div>
 
           {/* Temperature */}
-          <div className="px-4 py-1 text-xs uppercase text-gray-400">
+          <div
+            className={`px-4 py-1 text-xs uppercase ${
+              weather?.current?.is_day === 1
+                ? "text-black font-bold"
+                : "text-gray-400"
+            }`}
+          >
             Temperature
           </div>
           {["°C", "°F"].map((temp) => (
             <div
               key={temp}
-              className={` ${
-                temp === temperature ? "bg-gray-900" : ""
-              }px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 cursor-pointer flex justify-between`}
+              className={`px-4 py-2 text-sm cursor-pointer flex justify-between items-center ${
+                temp === temperature
+                  ? weather?.current?.is_day
+                    ? "bg-Blue-500"
+                    : "bg-Neutral-900"
+                  : ""
+              } ${
+                weather?.current?.is_day === 1
+                  ? "text-gray-800 hover:bg-blue-500"
+                  : "text-gray-200 hover:bg-gray-700"
+              }`}
               onClick={() => handleSelected("temperature", temp)}
             >
-              {temp === "°F" ? "Fahrenheit (°F)" : "Celcius(°C)"}
-              {temp === temperature && <span>✅</span>}
+              <span>{temp === "°F" ? "Fahrenheit (°F)" : "Celsius (°C)"}</span>
+              <span className="w-4 h-4 flex items-center justify-center">
+                {temp === temperature && (
+                  <img
+                    className="w-4 h-4"
+                    src="/assets/images/icon-checkmark.svg"
+                    alt="selected"
+                  />
+                )}
+              </span>
             </div>
           ))}
 
           {/* Wind */}
-          <div className="px-4 py-1 text-xs uppercase text-gray-400">
+          <div
+            className={`px-4 py-1 text-xs uppercase ${
+              weather?.current?.is_day === 1
+                ? "text-black font-bold"
+                : "text-gray-400"
+            }`}
+          >
             Wind Speed
           </div>
           {["km/h", "mph"].map((wind) => (
             <div
               key={wind}
-              className={` ${
-                wind === windSpeed ? "bg-gray-900" : ""
-              }px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 cursor-pointer flex justify-between`}
+              className={`px-4 py-2 text-sm cursor-pointer flex justify-between items-center ${
+                wind === windSpeed
+                  ? weather?.current?.is_day
+                    ? "bg-Blue-500"
+                    : "bg-Neutral-900"
+                  : ""
+              } ${
+                weather?.current?.is_day === 1
+                  ? "text-gray-800 hover:bg-blue-500"
+                  : "text-gray-200 hover:bg-gray-700"
+              }`}
               onClick={() => handleSelected("windspeed", wind)}
             >
-              {wind}
-              {wind === windSpeed && <span>✅</span>}
+              <span>{wind}</span>
+              <span className="w-4 h-4 flex items-center justify-center">
+                {wind === windSpeed && (
+                  <img
+                    className="w-4 h-4"
+                    src="/assets/images/icon-checkmark.svg"
+                    alt="selected"
+                  />
+                )}
+              </span>
             </div>
           ))}
 
           {/* Precipitation */}
-          <div className="px-4 py-1 text-xs uppercase text-gray-400">
+          <div
+            className={`px-4 py-1 text-xs uppercase ${
+              weather?.current?.is_day === 1
+                ? "text-black font-bold"
+                : "text-gray-400"
+            }`}
+          >
             Precipitation
           </div>
           {["mm", "in"].map((precip) => (
             <div
               key={precip}
-              className={` ${
-                precip === precipitation ? "bg-gray-900" : ""
-              }px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 cursor-pointer flex justify-between`}
+              className={`px-4 py-2 text-sm cursor-pointer flex justify-between items-center ${
+                precip === precipitation
+                  ? weather?.current?.is_day
+                    ? "bg-Blue-500"
+                    : "bg-Neutral-900"
+                  : ""
+              } ${
+                weather?.current?.is_day === 1
+                  ? "text-gray-800 hover:bg-blue-500"
+                  : "text-gray-200 hover:bg-gray-700"
+              }`}
               onClick={() => handleSelected("precipitation", precip)}
             >
-              <p>{precip === "mm" ? "Millimeters (mm)" : "Inches (in)"}</p>
-              {precip === precipitation && <span>✅</span>}
+              <span>
+                {precip === "mm" ? "Millimeters (mm)" : "Inches (in)"}
+              </span>
+              <span className="w-4 h-4 flex items-center justify-center">
+                {precip === precipitation && (
+                  <img
+                    className="w-4 h-4"
+                    src="/assets/images/icon-checkmark.svg"
+                    alt="selected"
+                  />
+                )}
+              </span>
             </div>
           ))}
         </div>

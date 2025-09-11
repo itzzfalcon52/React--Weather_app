@@ -200,8 +200,9 @@ function WeatherProvider({ children }) {
 
     try {
       setError("");
-      //setWeather(null);
+      setWeather(null);
       setCity("");
+      setLoadingWeather(true);
       const loc = await fetchCoordinates(city);
       if (!loc) {
         // if no city found

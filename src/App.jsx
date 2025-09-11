@@ -4,6 +4,7 @@ import { WeatherProvider } from "./contexts/WeatherContext";
 import SearchWeather from "./pages/SearchWeather";
 import Home from "./pages/Home";
 import WeatherCompare from "./pages/WeatherCompare";
+import SearchHome from "./pages/SearchHome";
 
 export default function App() {
   return (
@@ -13,7 +14,8 @@ export default function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/search" element={<SearchWeather />} />
+              <Route path="/search" element={<SearchHome />} />
+              <Route path="/weather" element={<SearchWeather />} />
               <Route path="/compare" element={<WeatherCompare />} />
             </Routes>
           </BrowserRouter>
