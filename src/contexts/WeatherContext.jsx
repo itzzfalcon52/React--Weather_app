@@ -16,6 +16,7 @@ function WeatherProvider({ children }) {
   const [location, setLocation] = useState(null);
   const [loadingWeather, setLoadingWeather] = useState(false);
   const [loadingSearch, setLoadingSearch] = useState(false);
+  const [showWeather, setShowWeather] = useState(false);
   const [error, setError] = useState("");
   const [weather, setWeather] = useState(null);
   const { temperature, precipitation, windSpeed } = UseUnits();
@@ -35,7 +36,8 @@ function WeatherProvider({ children }) {
       const { latitude, longitude, name, country } = data.results[0];
       return { latitude, longitude, name, country };
     } else {
-      throw new Error("Can't find a city with that name.");
+      setError("City not found..");
+      return null;
     }
   };
 
@@ -52,11 +54,10 @@ function WeatherProvider({ children }) {
       if (data.results && data.results.length > 0) {
         return data.results;
       } else {
-        setError("No results..");
         return [];
       }
-    } catch {
-      setError("Something went wrong.");
+    } catch (err) {
+      setError(err?.message || "Something went wrong.");
       return [];
     } finally {
       setLoadingSearch(false);
@@ -77,7 +78,7 @@ function WeatherProvider({ children }) {
         daily: data.daily,
       };
     } catch (err) {
-      setError("Network Error");
+      setError(err?.message || "Network Error");
       throw err;
     } finally {
       setLoadingWeather(false);
@@ -202,11 +203,21 @@ function WeatherProvider({ children }) {
       //setWeather(null);
       setCity("");
       const loc = await fetchCoordinates(city);
+      if (!loc) {
+        // if no city found
+        setError("Can't find a city with that name.");
+        setLocation(null);
+        setWeather(null);
+        setShowWeather(false);
+        return; // stop here
+      }
       setLocation(loc);
+      setShowWeather(true);
     } catch (err) {
-      setError(err.message);
+      setError(err?.message || "unknown error");
       setLocation(null);
       setWeather(null);
+      setShowWeather(false);
     }
   }
 
@@ -224,6 +235,7 @@ function WeatherProvider({ children }) {
         convertedWeather,
         fetchCoordinates,
         fetchSearchCities,
+        showWeather,
       }}
     >
       {children}

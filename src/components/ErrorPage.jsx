@@ -1,4 +1,4 @@
-function Error({ retry }) {
+function ErrorPage({ retry }) {
   return (
     <div className="bg-Neutral-700 h-full w-full">
       <span className="w-64 h-64">🚫</span>
@@ -19,4 +19,4 @@ function Error({ retry }) {
   );
 }
 
-export default Error;
+export default ErrorPage;

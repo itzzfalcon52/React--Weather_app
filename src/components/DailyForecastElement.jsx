@@ -118,10 +118,10 @@ function DailyForecastElement({ time, tempMax, tempMin, weatherCode, error }) {
       <div className="">{getWeatherEmoji(weatherCode)}</div>
       <div className="flex justify-between items-centre">
         <p className="font-bricolage font-bold text-white text-md p-2">
-          {!error ? `${tempMin}°` : error}
+          {!error ? `${tempMin}°` : String(error)}
         </p>
         <p className="font-bricolage font-bold text-white text-md p-2">
-          {!error ? `${tempMax}°` : error}
+          {!error ? `${tempMax}°` : String(error)}
         </p>
       </div>
     </div>

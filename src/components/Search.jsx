@@ -10,6 +10,7 @@ function Search() {
   const inputEl = useRef(null);
   const [show, setShow] = useState(false);
   const [tempCities, setTempCities] = useState([]);
+  const [errorSearch, setErrorSearch] = useState("");
 
   useEffect(() => {
     if (city.length < 3) return;
@@ -18,14 +19,24 @@ function Search() {
 
     async function loadCities() {
       try {
-        const results = await fetchSearchCities(city); // await async fn
+        setErrorSearch("");
+
+        const results = await fetchSearchCities(city); // await async fn\
+        if (results.length === 0) {
+          setTempCities([]);
+          setErrorSearch(
+            "City with that name does not exist. Please try again 😔"
+          );
+        }
         if (isMounted) {
           setTempCities(results);
           console.log(results);
-        } // only update if mounted
+        }
+        // only update if mounted
       } catch (err) {
         console.error(err);
         if (isMounted) setTempCities([]); // fallback to empty array
+        setErrorSearch("error finding cities..");
       }
     }
 
@@ -80,6 +91,7 @@ function Search() {
             if (e.key === "Enter") {
               e.preventDefault(); // stop form submit/reload
               onClickSearch(); // trigger search
+              setShow(false);
             }
           }}
         />
@@ -88,6 +100,7 @@ function Search() {
             tempCities={tempCities}
             setCity={setCity}
             setShow={setShow}
+            errorSearch={errorSearch}
           />
         )}
       </div>
@@ -98,7 +111,7 @@ function Search() {
         Search
       </button>
 
-      {error && <div className="text-red-500 mt-2">{error}</div>}
+      {error && <div className="text-red-500 mt-2">{String(error)}</div>}
     </div>
   );
 }
