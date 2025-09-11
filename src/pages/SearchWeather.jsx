@@ -21,6 +21,8 @@ function SearchWeather() {
     }
   }, [showWeather, navigate]);
 
+  if (!showWeather) return null; // <-- prevents SearchHome from rendering
+
   const isDay = weather?.current?.is_day === 1;
 
   return (
@@ -29,20 +31,16 @@ function SearchWeather() {
         <Units />
       </Header>
 
-      {showWeather ? (
-        <div
-          className={`w-full h-full grid grid-cols-7 grid-rows-7 gap-y-2 gap-x-2 p-10 max-sm:block max-sm:p-2 max-sm:mb-24 
-          ${isDay ? "bg-teal-50" : "bg-Neutral-900"}`}
-        >
-          <Search />
-          <WeatherCard />
-          <WeatherDetails />
-          <DailyForecast />
-          <HourlyForecast />
-        </div>
-      ) : (
-        <SearchHome />
-      )}
+      <div
+        className={`w-full h-full grid grid-cols-7 grid-rows-7 gap-y-2 gap-x-2 p-10 max-sm:block max-sm:p-2 max-sm:mb-24 
+        ${isDay ? "bg-teal-50" : "bg-Neutral-900"}`}
+      >
+        <Search />
+        <WeatherCard />
+        <WeatherDetails />
+        <DailyForecast />
+        <HourlyForecast />
+      </div>
     </>
   );
 }

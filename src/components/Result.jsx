@@ -1,11 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import { UseWeather } from "../contexts/WeatherContext";
 
 function Result({ city, code, setShow, setCity }) {
   const { onClickSearch } = UseWeather();
-  function handleClick() {
+  const navigation = useNavigate();
+  async function handleClick() {
     setCity(city);
-    onClickSearch();
     setShow(false);
+    await onClickSearch();
+
+    navigation("/weather");
   }
   return (
     <li
