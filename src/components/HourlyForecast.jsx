@@ -26,7 +26,7 @@ function getNextDayISO(dayISO) {
 }
 
 function HourlyForecast() {
-  const { weather, loading, convertedWeather } = UseWeather();
+  const { weather, loadingWeather, convertedWeather } = UseWeather();
 
   //if (!weather || loading || error) return null;
 
@@ -81,7 +81,7 @@ function HourlyForecast() {
             )}
           </select>
         </div>
-        {loading && (
+        {loadingWeather && (
           <ul className="content flex flex-col flex-1    pr-2 items-stretch ">
             {Array.from({ length: 7 }).map((_, i) => (
               <li

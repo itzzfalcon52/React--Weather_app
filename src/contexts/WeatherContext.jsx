@@ -14,7 +14,8 @@ const WeatherContext = createContext();
 function WeatherProvider({ children }) {
   const [city, setCity] = useState("");
   const [location, setLocation] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingWeather, setLoadingWeather] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
   const [error, setError] = useState("");
   const [weather, setWeather] = useState(null);
   const { temperature, precipitation, windSpeed } = UseUnits();
@@ -22,7 +23,7 @@ function WeatherProvider({ children }) {
   //const controller = new AbortController();
 
   const fetchCoordinates = async (city) => {
-    setLoading(true);
+    setLoadingWeather(true);
     setError("");
 
     const res = await fetch(
@@ -38,8 +39,33 @@ function WeatherProvider({ children }) {
     }
   };
 
+  const fetchSearchCities = useCallback(async (value) => {
+    setLoadingSearch(true);
+    setError("");
+
+    try {
+      const res = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${value}&count=5&language=en`
+      );
+      const data = await res.json();
+
+      if (data.results && data.results.length > 0) {
+        return data.results;
+      } else {
+        setError("No results..");
+        return [];
+      }
+    } catch {
+      setError("Something went wrong.");
+      return [];
+    } finally {
+      setLoadingSearch(false);
+    }
+  }, []);
+
   async function fetchWeather(lat, lng) {
     try {
+      setLoadingWeather(true);
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,precipitation,weathercode,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode,windspeed_10m_max&current_weather=true&timezone=auto`;
 
       const res = await fetch(url);
@@ -53,6 +79,8 @@ function WeatherProvider({ children }) {
     } catch (err) {
       setError("Network Error");
       throw err;
+    } finally {
+      setLoadingWeather(false);
     }
   }
   const handleConversion = useCallback(
@@ -170,7 +198,6 @@ function WeatherProvider({ children }) {
     if (city.length < 3) return;
 
     try {
-      setLoading(true);
       setError("");
       //setWeather(null);
       setCity("");
@@ -180,8 +207,6 @@ function WeatherProvider({ children }) {
       setError(err.message);
       setLocation(null);
       setWeather(null);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -191,11 +216,14 @@ function WeatherProvider({ children }) {
         city,
         setCity,
         location,
-        loading,
+        loadingSearch,
+        loadingWeather,
         error,
         onClickSearch: handleSearch,
         weather,
         convertedWeather,
+        fetchCoordinates,
+        fetchSearchCities,
       }}
     >
       {children}

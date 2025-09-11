@@ -1,11 +1,46 @@
 //import { useEffect, useState } from "react";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UseWeather } from "../contexts/WeatherContext";
+import SearchResults from "./SearchResults";
 
 function Search() {
-  const { city, setCity, error, onClickSearch } = UseWeather();
+  const { city, setCity, error, onClickSearch, fetchSearchCities } =
+    UseWeather();
   const inputEl = useRef(null);
+  const [show, setShow] = useState(false);
+  const [tempCities, setTempCities] = useState([]);
+
+  useEffect(() => {
+    if (city.length < 3) return;
+
+    let isMounted = true;
+
+    async function loadCities() {
+      try {
+        const results = await fetchSearchCities(city); // await async fn
+        if (isMounted) {
+          setTempCities(results);
+          console.log(results);
+        } // only update if mounted
+      } catch (err) {
+        console.error(err);
+        if (isMounted) setTempCities([]); // fallback to empty array
+      }
+    }
+
+    loadCities();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [city, fetchSearchCities]);
+
+  function handleSearchResults(e) {
+    setCity(e.target.value);
+    setShow(true);
+  }
+
   useEffect(
     function () {
       function callBack(e) {
@@ -33,15 +68,14 @@ function Search() {
             alt="Search icon"
           />
         </span>
+
         <input
           type="text"
           placeholder="Search for a city..."
-          className="w-full border-none text-center px-2 py-2 rounded-lg focus:outline-none text-white bg-gray-700 shadow-sm focus:border-white focus:ring-2 focus:ring-white"
+          className="  w-full border-none text-center px-2 py-2 rounded-lg focus:outline-none text-white bg-gray-700 shadow-sm focus:border-white focus:ring-2 focus:ring-white"
           value={city}
-          onChange={(e) => {
-            setCity(e.target.value);
-          }}
           ref={inputEl}
+          onChange={handleSearchResults}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault(); // stop form submit/reload
@@ -49,9 +83,16 @@ function Search() {
             }
           }}
         />
+        {show && (
+          <SearchResults
+            tempCities={tempCities}
+            setCity={setCity}
+            setShow={setShow}
+          />
+        )}
       </div>
       <button
-        className="basis-32 bg-Blue-500 ml-4 p-2 rounded-lg text-white active:border-blue-500 active:ring-2 active:ring-blue-500 hover:-translate-y-2 hover:bg-indigo-700 disabled:bg-gray-700 max-sm:basis-0 max-sm:w-full max-sm:ml-0"
+        className="basis-32 bg-Blue-500 ml-4 p-2 rounded-lg text-white active:border-blue-500 active:ring-2 active:ring-blue-500 hover:-translate-y-2 hover:bg-indigo-700  max-sm:basis-0 max-sm:w-full max-sm:ml-0"
         onClick={onClickSearch}
       >
         Search

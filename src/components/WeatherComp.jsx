@@ -2,13 +2,13 @@ import { motion } from "motion/react";
 import { UseWeather } from "../contexts/WeatherContext";
 
 function WeatherComp({ label, value, unit }) {
-  const { loading } = UseWeather();
+  const { loadingWeather } = UseWeather();
   return (
     <div className=" flex-1 flex flex-col px-2 py-1 mr-2 rounded-lg bg-gray-700 justify-around items-center">
       <span className="text-lg text-white font-bricolage font-light ">
         {label}
       </span>
-      {loading ? (
+      {loadingWeather ? (
         <motion.span
           className="text-lg text-white"
           initial={{ opacity: 0 }}

@@ -122,7 +122,7 @@ function getWeatherEmoji(code) {
   return "❓"; // Unknown
 }
 function WeatherCard() {
-  const { location, loading, weather, convertedWeather } = UseWeather();
+  const { location, loadingWeather, weather, convertedWeather } = UseWeather();
 
   // Extract current weather once
   const current = weather?.current;
@@ -130,7 +130,7 @@ function WeatherCard() {
   return (
     <div className="col-span-4  row-span-2 row-start-2 max-sm:mt-4 ">
       <div className="weather-card w-full h-full rounded-2xl m-2 bg-cover bg-[url('/assets/images/bg-today-large.svg')] flex justify-between items-center max-sm:m-0 max-sm:flex-col  ">
-        {loading ? (
+        {loadingWeather ? (
           // 🔄 Loader inside the card
           <div className="flex w-full h-full justify-center items-center">
             <LoaderWeather />
