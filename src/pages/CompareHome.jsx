@@ -30,16 +30,16 @@ function CompareHome() {
   }
 
   return (
-    <div className="absolute inset-0 bg-teal-900 min-h-screen w-full">
+    <div className="absolute inset-0 bg-teal-900 min-h-screen w-full max-sm:relative">
       <HomePage>
-        <h2 className="text-5xl font-bold text-white mb-4 sm:text=3xl">
+        <h2 className="text-5xl font-bold text-white mb-4 sm:text=3xl max-sm:-mt-24">
           🌤️ Welcome to Weather Compare
         </h2>
         <p className="text-gray-400 text-lg mb-6">
           Compare weather of any two cities to streamline your travel plans
         </p>
       </HomePage>
-      <div className="flex cards justify-center items-start gap-8 px-4 mt-8">
+      <div className="flex cards justify-center items-start gap-8 px-4 mt-8 max-sm:flex-col ">
         {/* First City Card */}
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 w-full max-w-md hover:bg-white/15 transition-all duration-300">
           <div className="mb-4">
