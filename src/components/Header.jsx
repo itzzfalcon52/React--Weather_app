@@ -14,7 +14,7 @@ function Header({ children }) {
       <div className="header p-6 flex justify-between">
         <Link to="/">
           <img
-            src="/assets/images/logo-dark.svg"
+            src="/assets/images/Untitled.svg"
             alt="logo"
             className="ml-4 max-sm:w-1/2 max-sm:ml-0 "
           ></img>

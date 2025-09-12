@@ -165,6 +165,28 @@ function WeatherProvider({ children }) {
     [temperature, windSpeed, precipitation]
   );
 
+  async function getCityWeather(cityName) {
+    //this is specifically for compare weather page as we dont want it to go through the search presssss!!
+
+    try {
+      setLoadingWeather(true);
+      const loc = await fetchCoordinates(cityName);
+      if (!loc) return;
+      const data = await fetchWeather(loc.latitude, loc.longitude);
+      const convertedData = handleConversion(data);
+
+      return {
+        location: loc,
+        weather: convertedData,
+      };
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "somethon went wrong!");
+    } finally {
+      setLoadingWeather(false);
+    }
+  }
+
   const convertedWeather = useMemo(() => {
     if (!weather) return null;
     return handleConversion(weather);
@@ -237,6 +259,7 @@ function WeatherProvider({ children }) {
         fetchCoordinates,
         fetchSearchCities,
         showWeather,
+        getCityWeather,
       }}
     >
       {children}

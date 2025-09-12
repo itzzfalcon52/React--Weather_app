@@ -3,9 +3,8 @@ import { UseWeather } from "../contexts/WeatherContext";
 import SearchResults from "./SearchResults";
 import { useNavigate } from "react-router-dom";
 
-function Search() {
-  const { city, setCity, error, onClickSearch, fetchSearchCities } =
-    UseWeather();
+function Search({ city = "", setCity, onSearch, navigateOnSearch = true }) {
+  const { error, fetchSearchCities } = UseWeather();
   const inputEl = useRef(null);
   const [show, setShow] = useState(false);
   const [tempCities, setTempCities] = useState([]);
@@ -67,8 +66,8 @@ function Search() {
   }, [setCity]);
 
   async function handleSearch() {
-    const ok = await onClickSearch(); // context search
-    if (ok !== false) {
+    const ok = await onSearch(); // context search
+    if (ok !== false && navigateOnSearch) {
       navigate("/weather"); // ✅ redirect to SearchWeather page
     }
     setShow(false);
@@ -107,6 +106,8 @@ function Search() {
             setCity={setCity}
             setShow={setShow}
             errorSearch={errorSearch}
+            navigateOnSearch={navigateOnSearch}
+            onSearch={onSearch}
           />
         )}
       </div>

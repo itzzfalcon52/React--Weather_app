@@ -3,7 +3,14 @@
 import { UseWeather } from "../contexts/WeatherContext";
 import Result from "./Result";
 
-function SearchResults({ tempCities, setCity, setShow, errorSearch }) {
+function SearchResults({
+  tempCities,
+  setCity,
+  setShow,
+  errorSearch,
+  navigateOnSearch,
+  onSearch,
+}) {
   const { loadingSearch } = UseWeather();
 
   if (loadingSearch) {
@@ -42,6 +49,8 @@ function SearchResults({ tempCities, setCity, setShow, errorSearch }) {
           key={city.id}
           setCity={setCity}
           setShow={setShow}
+          navigateOnSearch={navigateOnSearch}
+          onSearch={onSearch}
         />
       ))}
     </ul>

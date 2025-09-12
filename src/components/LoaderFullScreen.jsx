@@ -30,7 +30,7 @@ const loadingCircleTransition = {
 
 function LoaderFullScreen() {
   return (
-    <div className="flex flex-col justify-center items-center h-screen w-screen ">
+    <div className="flex flex-col justify-center items-center h-screen w-screen bg-Neutral-900 ">
       <motion.div
         className="flex h-full w-full  justify-center items-center "
         variants={loadingContainerVariant}

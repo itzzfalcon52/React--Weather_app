@@ -5,6 +5,7 @@ import { lazy, Suspense } from "react";
 //import SearchWeather from "./pages/SearchWeather";
 import Home from "./pages/Home";
 import LoaderFullScreen from "./components/LoaderFullScreen";
+import CompareHome from "./pages/CompareHome";
 //import WeatherCompare from "./pages/WeatherCompare";
 //import SearchHome from "./pages/SearchHome";
 const SearchWeather = lazy(() => import("./pages/SearchWeather"));
@@ -13,7 +14,7 @@ const WeatherCompare = lazy(() => import("./pages/WeatherCompare"));
 
 export default function App() {
   return (
-    <div className="bg-Neutral-900 h-screen w-screen overflow-auto">
+    <div className="min-h-screen w-full m-0 p-0">
       <UnitsProvider>
         <WeatherProvider>
           <BrowserRouter>
@@ -22,7 +23,8 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/search" element={<SearchHome />} />
                 <Route path="/weather" element={<SearchWeather />} />
-                <Route path="/compare" element={<WeatherCompare />} />
+                <Route path="/compare" element={<CompareHome />} />
+                <Route path="/cities" element={<WeatherCompare />} />
               </Routes>
             </Suspense>
           </BrowserRouter>
