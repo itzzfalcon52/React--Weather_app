@@ -55,9 +55,12 @@ function Search({ city = "", setCity, onSearch, navigateOnSearch = true }) {
     function callBack(e) {
       if (document.activeElement === inputEl.current) return;
       if (e.key === " " || e.code === "Space") {
-        e.preventDefault();
-        inputEl.current.focus();
-        setCity("");
+        if (navigateOnSearch) {
+          //this we use here as we dont want this functionality in our compare app
+          e.preventDefault();
+          inputEl.current.focus();
+          setCity("");
+        }
       }
     }
 

@@ -1,24 +1,32 @@
 import HomePage from "../components/HomePage";
 import Search from "../components/Search";
-import { useState } from "react";
-import { UseWeather } from "../contexts/WeatherContext";
+
+import LoaderWeather from "../components/LoaderWeather";
+import { UseCompare } from "../contexts/CompareContext";
 import { useNavigate } from "react-router-dom";
+import { Edit2Icon } from "lucide-react";
+import { useState } from "react";
 
 function CompareHome() {
-  const [cityInput1, setCityInput1] = useState(""); // just the input string
-  const [cityData1, setCityData1] = useState(null); // full weather object
-
-  const [cityInput2, setCityInput2] = useState("");
-  const [cityData2, setCityData2] = useState(null);
-
-  const { getCityWeather } = UseWeather();
   const navigate = useNavigate();
+  const {
+    cityData1,
+    cityData2,
+    handleSearch,
+    setCityInput1,
+    cityInput1,
+    setCityData1,
+    setCityData2,
+    setCityInput2,
+    loading1,
+    loading2,
+    setLoading1,
+    setLoading2,
+    cityInput2,
+  } = UseCompare();
 
-  async function handleSearch(city, setCityData, setCityName) {
-    const data = await getCityWeather(city);
-    if (!data) return;
-    setCityData(data);
-    setCityName(data.location.name);
+  function handleEdit(setCityData) {
+    setCityData(null);
   }
 
   async function handleCompare() {
@@ -28,7 +36,6 @@ function CompareHome() {
       });
     }
   }
-
   return (
     <div className="absolute inset-0 bg-teal-900 min-h-screen w-full max-sm:relative">
       <HomePage>
@@ -48,24 +55,42 @@ function CompareHome() {
             </h3>
             <p className="text-teal-100 text-sm">Search for your first city</p>
           </div>
+
           {!cityData1 ? (
             <Search
               city={cityInput1}
               setCity={setCityInput1}
               onSearch={() =>
-                handleSearch(cityInput1, setCityData1, setCityInput1)
+                handleSearch(
+                  cityInput1,
+                  setCityData1,
+                  setCityInput1,
+                  setLoading1
+                )
               }
               navigateOnSearch={false}
             />
           ) : (
-            <div className="details w-full flex">
-              <span className="text-2xl font-bricolage text-white">
+            <div className="details w-full flex justify-between">
+              <div className="text-2xl font-bricolage text-white">
                 {cityInput1} ,
-              </span>
-              <span className="text-2xl font-bricolage text-white ">
-                {cityData1.location.country}
-              </span>
+                <span className="text-2xl font-bricolage text-white ">
+                  {cityData1.location.country}
+                </span>
+              </div>
+
+              <button
+                className="text-white cursor-pointer "
+                onClick={() => handleEdit(setCityData1)}
+              >
+                <Edit2Icon size={32} />
+              </button>
             </div>
+          )}
+          {loading1 && (
+            <>
+              <LoaderWeather />
+            </>
           )}
         </div>
 
@@ -82,19 +107,36 @@ function CompareHome() {
               city={cityInput2}
               setCity={setCityInput2}
               onSearch={() =>
-                handleSearch(cityInput2, setCityData2, setCityInput2)
+                handleSearch(
+                  cityInput2,
+                  setCityData2,
+                  setCityInput2,
+                  setLoading2
+                )
               }
               navigateOnSearch={false}
             />
           ) : (
-            <div className="details w-full flex">
-              <span className="text-2xl font-bricolage text-white">
+            <div className="details w-full flex justify-between">
+              <div className="text-2xl font-bricolage text-white">
                 {cityInput2} ,
-              </span>
-              <span className="text-2xl font-bricolage text-white ">
-                {cityData2.location.country}
-              </span>
+                <span className="text-2xl font-bricolage text-white ">
+                  {cityData2.location.country}
+                </span>
+              </div>
+
+              <button
+                className="text-white cursor-pointer "
+                onClick={() => handleEdit(setCityData2)}
+              >
+                <Edit2Icon size={32} />
+              </button>
             </div>
+          )}
+          {loading2 && (
+            <>
+              <LoaderWeather />
+            </>
           )}
         </div>
       </div>
@@ -102,8 +144,12 @@ function CompareHome() {
       {/* Compare Button */}
       <div className="flex justify-center mt-8 px-4">
         <button
-          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2 "
-          disabled={!cityData1 || !cityData2}
+          className={`font-bold py-3 px-8 rounded-xl shadow-lg transform flex items-center gap-2 transition-all duration-200
+            ${
+              !cityData1 || !cityData2
+                ? "bg-gray-800 text-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-blue-600 text-white hover:scale-105"
+            }`}
           onClick={handleCompare}
         >
           ⚡ Compare Weather

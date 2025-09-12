@@ -173,11 +173,12 @@ function WeatherProvider({ children }) {
       const loc = await fetchCoordinates(cityName);
       if (!loc) return;
       const data = await fetchWeather(loc.latitude, loc.longitude);
-      const convertedData = handleConversion(data);
+      //const convertedData = handleConversion(data);
+      //console.log(convertedData);
 
       return {
         location: loc,
-        weather: convertedData,
+        weather: data,
       };
     } catch (err) {
       console.error(err);
@@ -260,6 +261,7 @@ function WeatherProvider({ children }) {
         fetchSearchCities,
         showWeather,
         getCityWeather,
+        handleConversion,
       }}
     >
       {children}
