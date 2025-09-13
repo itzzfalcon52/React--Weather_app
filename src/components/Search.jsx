@@ -4,7 +4,13 @@ import SearchResults from "./SearchResults";
 import { useNavigate } from "react-router-dom";
 
 function Search({ city = "", setCity, onSearch, navigateOnSearch = true }) {
-  const { error, fetchSearchCities } = UseWeather();
+  const {
+    error,
+    fetchSearchCities,
+    handleGeolocationWeather,
+    loadingWeather,
+    showWeather,
+  } = UseWeather();
   const inputEl = useRef(null);
   const [show, setShow] = useState(false);
   const [tempCities, setTempCities] = useState([]);
@@ -66,7 +72,7 @@ function Search({ city = "", setCity, onSearch, navigateOnSearch = true }) {
 
     document.addEventListener("keydown", callBack);
     return () => document.removeEventListener("keydown", callBack);
-  }, [setCity]);
+  }, [setCity, navigateOnSearch]);
 
   async function handleSearch() {
     const ok = await onSearch(); // context search
@@ -76,52 +82,72 @@ function Search({ city = "", setCity, onSearch, navigateOnSearch = true }) {
     setShow(false);
   }
 
+  async function handleClick() {
+    const ok = await handleGeolocationWeather();
+    if (ok) {
+      navigate("/weather");
+    }
+  }
+
   return (
-    <div
-      className={`search flex justify-center items-center max-sm:flex-col max-sm:justify-between max-sm:mx-2 row-start-1 row-span-1 col-span-7`}
-    >
-      <div className="relative basis-128 max-sm:basis-0 max-sm:mb-2 max-sm:w-full">
-        <span className="absolute top-0 left-0 m-0.5 py-2">
-          <img
-            src="/assets/images/icon-search.svg"
-            className="w-5 h-5 ml-0.5"
-            alt="Search icon"
-          />
-        </span>
-
-        <input
-          type="text"
-          placeholder="Search for a city..."
-          className="w-full border-none text-center px-2 py-2 rounded-lg focus:outline-none text-white bg-gray-700 shadow-sm focus:border-white focus:ring-2 focus:ring-white"
-          value={city}
-          ref={inputEl}
-          onChange={handleSearchResults}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleSearch(); // ✅ trigger + navigate
-            }
-          }}
-        />
-        {show && (
-          <SearchResults
-            tempCities={tempCities}
-            setCity={setCity}
-            setShow={setShow}
-            errorSearch={errorSearch}
-            navigateOnSearch={navigateOnSearch}
-            onSearch={onSearch}
-          />
-        )}
-      </div>
-      <button
-        className="basis-32 bg-blue-500 ml-4 p-2 rounded-lg text-white active:border-blue-500 active:ring-2 active:ring-blue-500 hover:-translate-y-2 hover:bg-indigo-700 max-sm:basis-0 max-sm:w-full max-sm:ml-0"
-        onClick={handleSearch}
+    <div className="flex flex-col   items-center justify-center gap-4 w-full row-start-1 row-span-1 col-span-7">
+      <div
+        className={`search w-full flex justify-center items-center max-sm:flex-col max-sm:justify-between max-sm:mx-2 `}
       >
-        Search
-      </button>
+        <div className="relative basis-128 max-sm:basis-0 max-sm:mb-2 max-sm:w-full">
+          <span className="absolute top-0 left-0 m-0.5 py-2">
+            <img
+              src="/assets/images/icon-search.svg"
+              className="w-5 h-5 ml-0.5"
+              alt="Search icon"
+            />
+          </span>
 
-      {error && <div className="text-red-500 mt-2">{String(error)}</div>}
+          <input
+            type="text"
+            placeholder="Search for a city..."
+            className="w-full border-none text-center px-2 py-2 rounded-lg focus:outline-none text-white bg-gray-700 shadow-sm focus:border-white focus:ring-2 focus:ring-white"
+            value={city}
+            ref={inputEl}
+            onChange={handleSearchResults}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch(); // ✅ trigger + navigate
+              }
+            }}
+          />
+          {show && (
+            <SearchResults
+              tempCities={tempCities}
+              setCity={setCity}
+              setShow={setShow}
+              errorSearch={errorSearch}
+              navigateOnSearch={navigateOnSearch}
+              onSearch={onSearch}
+            />
+          )}
+        </div>
+        <button
+          className="basis-32 bg-blue-500 ml-4 p-2 rounded-lg text-white active:border-blue-500 active:ring-2 active:ring-blue-500 hover:-translate-y-2 hover:bg-indigo-700 max-sm:basis-0 max-sm:w-full max-sm:ml-0"
+          onClick={handleSearch}
+        >
+          Search
+        </button>
+
+        {error && <div className="text-red-500 mt-2">{String(error)}</div>}
+      </div>
+
+      {navigateOnSearch && (
+        <button
+          className={`bg-orange-500 text-white px-4 py-2 rounded-lg w-64  ${
+            loadingWeather ? "bg-gray-900" : "bg-orange-500"
+          }`}
+          onClick={handleClick}
+        >
+          {loadingWeather ? "Loading..." : "Get your current city"}
+        </button>
+      )}
     </div>
   );
 }

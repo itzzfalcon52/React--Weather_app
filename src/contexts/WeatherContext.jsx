@@ -7,7 +7,7 @@ import {
   useMemo,
 } from "react";
 import { UseUnits } from "./UnitsContext";
-//import { fetchWeatherApi } from "openmeteo";
+import { useGeolocation } from "../hooks/useGeolocation";
 
 const WeatherContext = createContext();
 
@@ -21,7 +21,7 @@ function WeatherProvider({ children }) {
   const [weather, setWeather] = useState(null);
   const { temperature, precipitation, windSpeed } = UseUnits();
 
-  //const controller = new AbortController();
+  const { getPosition } = useGeolocation();
 
   const fetchCoordinates = async (city) => {
     setLoadingWeather(true);
@@ -40,6 +40,19 @@ function WeatherProvider({ children }) {
       return null;
     }
   };
+
+  async function reverseGeocode(lat, lng) {
+    const res = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+    );
+    const data = await res.json();
+    return {
+      latitude: lat,
+      longitude: lng,
+      name: data.city || data.locality || data.principalSubdivision,
+      country: data.countryName,
+    };
+  }
 
   const fetchSearchCities = useCallback(async (value) => {
     setLoadingSearch(true);
@@ -84,6 +97,7 @@ function WeatherProvider({ children }) {
       setLoadingWeather(false);
     }
   }
+
   const handleConversion = useCallback(
     (data) => {
       if (!data) return null;
@@ -165,58 +179,39 @@ function WeatherProvider({ children }) {
     [temperature, windSpeed, precipitation]
   );
 
-  async function getCityWeather(cityName) {
-    //this is specifically for compare weather page as we dont want it to go through the search presssss!!
+  useEffect(() => {
+    async function getWeather() {
+      try {
+        if (!location) return;
+        const data = await fetchWeather(location.latitude, location.longitude);
+        setWeather(data);
+        console.log(data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    getWeather();
+  }, [location, temperature, precipitation, windSpeed]);
 
+  async function handleGeolocationWeather() {
     try {
+      setShowWeather(false);
+      setError("");
       setLoadingWeather(true);
-      const loc = await fetchCoordinates(cityName);
-      if (!loc) return;
-      const data = await fetchWeather(loc.latitude, loc.longitude);
-      //const convertedData = handleConversion(data);
-      //console.log(convertedData);
-
-      return {
-        location: loc,
-        weather: data,
-      };
+      const pos = await getPosition();
+      if (!pos) return;
+      const loc = await reverseGeocode(pos.latitude, pos.longitude);
+      setLocation(loc);
+      setShowWeather(true);
+      return true;
     } catch (err) {
       console.error(err);
-      setError(err.message || "somethon went wrong!");
-    } finally {
-      setLoadingWeather(false);
+      setError(err.message || "Unable to fetch weather from geolocation");
+      setLocation(null);
+      setWeather(null);
+      setShowWeather(false);
     }
   }
-
-  const convertedWeather = useMemo(() => {
-    if (!weather) return null;
-    return handleConversion(weather);
-  }, [weather, handleConversion]);
-
-  useEffect(
-    function () {
-      async function getWeather() {
-        try {
-          if (!location) return;
-          const data = await fetchWeather(
-            location.latitude,
-            location.longitude
-          );
-          setWeather(data);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-      getWeather();
-    },
-    [location, temperature, precipitation, windSpeed]
-  );
-
-  useEffect(() => {
-    console.log(weather);
-  }, [weather]);
-
-  //function handleConversion() {}
 
   async function handleSearch() {
     if (city.length < 3) return;
@@ -226,14 +221,14 @@ function WeatherProvider({ children }) {
       setWeather(null);
       setCity("");
       setLoadingWeather(true);
+
       const loc = await fetchCoordinates(city);
       if (!loc) {
-        // if no city found
         setError("Can't find a city with that name.");
         setLocation(null);
         setWeather(null);
         setShowWeather(false);
-        return; // stop here
+        return;
       }
       setLocation(loc);
       setShowWeather(true);
@@ -244,6 +239,11 @@ function WeatherProvider({ children }) {
       setShowWeather(false);
     }
   }
+
+  const convertedWeather = useMemo(() => {
+    if (!weather) return null;
+    return handleConversion(weather);
+  }, [weather, handleConversion]);
 
   return (
     <WeatherContext.Provider
@@ -260,8 +260,7 @@ function WeatherProvider({ children }) {
         fetchCoordinates,
         fetchSearchCities,
         showWeather,
-        getCityWeather,
-        handleConversion,
+        handleGeolocationWeather,
       }}
     >
       {children}
@@ -272,7 +271,7 @@ function WeatherProvider({ children }) {
 function UseWeather() {
   const context = useContext(WeatherContext);
   if (!context)
-    throw new Error("useWeather must be used within a WeatherProvider");
+    throw new Error("UseWeather must be used within a WeatherProvider");
   return context;
 }
 

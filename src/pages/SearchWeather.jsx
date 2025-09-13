@@ -35,10 +35,12 @@ function SearchWeather() {
       </Header>
 
       <div
-        className={`w-screen h-screen grid grid-cols-7 grid-rows-7 gap-y-2 gap-x-2 p-10 max-sm:block max-sm:p-2 max-sm:mb-24 
+        className={`w-screen h-screen grid grid-cols-7 grid-rows-7 gap-y-2 gap-x-2 p-10 max-sm:block max-sm:p-2 max-sm:mb-24  max-sm:min-h-screen overflow-auto
         ${isDay ? "bg-teal-50" : "bg-Neutral-900"}`}
       >
-        <Search city={city} setCity={setCity} onSearch={onClickSearch} />
+        <div className="col-span-7">
+          <Search city={city} setCity={setCity} onSearch={onClickSearch} />
+        </div>
         <WeatherCard />
         <WeatherDetails />
         <DailyForecast />
