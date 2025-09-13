@@ -274,6 +274,7 @@ function WeatherProvider({ children }) {
         showWeather,
         getCityWeather,
         handleGeolocationWeather,
+        handleConversion,
       }}
     >
       {children}
