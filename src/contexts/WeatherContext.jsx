@@ -193,6 +193,17 @@ function WeatherProvider({ children }) {
     getWeather();
   }, [location, temperature, precipitation, windSpeed]);
 
+  async function getCityWeather(city) {
+    //this is only for compare weather as we dont want it to mix with our main data
+    if (!city) return null;
+
+    const loc = await fetchCoordinates(city);
+    if (!loc) return null;
+
+    const data = await fetchWeather(loc.latitude, loc.longitude);
+    return { location: loc, weather: data };
+  }
+
   async function handleGeolocationWeather() {
     try {
       setShowWeather(false);
@@ -261,6 +272,7 @@ function WeatherProvider({ children }) {
         fetchCoordinates,
         fetchSearchCities,
         showWeather,
+        getCityWeather,
         handleGeolocationWeather,
       }}
     >

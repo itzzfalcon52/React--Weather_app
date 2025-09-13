@@ -14,7 +14,7 @@ function Search({ city = "", setCity, onSearch, navigateOnSearch = true }) {
   const [errorSearch, setErrorSearch] = useState("");
   const navigate = useNavigate();
 
-  const { startListening, listening, supported } = useSpeech((text) => {
+  const { startListening, listening } = useSpeech((text) => {
     setCity(text); // update input
     setShow(true);
     //onSearch(); // optionally trigger search
