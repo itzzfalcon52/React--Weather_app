@@ -2,20 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import { UseWeather } from "../contexts/WeatherContext";
 import SearchResults from "./SearchResults";
 import { useNavigate } from "react-router-dom";
+import useSpeech from "../hooks/useSpeech";
+import { Mic } from "lucide-react";
 
 function Search({ city = "", setCity, onSearch, navigateOnSearch = true }) {
-  const {
-    error,
-    fetchSearchCities,
-    handleGeolocationWeather,
-    loadingWeather,
-    showWeather,
-  } = UseWeather();
+  const { error, fetchSearchCities, handleGeolocationWeather, loadingWeather } =
+    UseWeather();
   const inputEl = useRef(null);
   const [show, setShow] = useState(false);
   const [tempCities, setTempCities] = useState([]);
   const [errorSearch, setErrorSearch] = useState("");
   const navigate = useNavigate();
+
+  const { startListening, listening, supported } = useSpeech((text) => {
+    setCity(text); // update input
+    setShow(true);
+    //onSearch(); // optionally trigger search
+  });
 
   // 🔍 Autocomplete suggestions
   useEffect(() => {
@@ -102,6 +105,15 @@ function Search({ city = "", setCity, onSearch, navigateOnSearch = true }) {
               alt="Search icon"
             />
           </span>
+
+          <button
+            className={`absolute top-0 right-0 m-0.5 py-2 text-center cursor-pointer  ${
+              listening ? "text-green-500" : "text-white"
+            }`}
+            onClick={startListening}
+          >
+            <Mic size={32} />
+          </button>
 
           <input
             type="text"

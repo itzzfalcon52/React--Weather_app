@@ -210,6 +210,7 @@ function WeatherProvider({ children }) {
       setLocation(null);
       setWeather(null);
       setShowWeather(false);
+      return false;
     }
   }
 
