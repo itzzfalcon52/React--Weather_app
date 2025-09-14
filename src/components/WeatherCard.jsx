@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { UseFavorites } from "../contexts/FavoritesContext";
 import { UseWeather } from "../contexts/WeatherContext";
 import LoaderWeather from "./LoaderWeather";
 
@@ -123,6 +125,18 @@ function getWeatherEmoji(code) {
 }
 function WeatherCard() {
   const { location, loadingWeather, weather, convertedWeather } = UseWeather();
+  const { addFavorites, favorites, isFavorite } = UseFavorites();
+  const cityObj = {
+    location,
+    weather,
+  };
+  function handleFavorite() {
+    addFavorites(cityObj);
+    console.log(favorites);
+  }
+  useEffect(() => {
+    console.log(favorites);
+  }, [favorites]);
 
   // Extract current weather once
   const current = weather?.current;
@@ -147,6 +161,15 @@ function WeatherCard() {
                 {findingDay(current.time)}
                 {formatDate(current.time)} {/* e.g. Aug 05 2025 */}
               </p>
+              <button
+                className="bg-Orange-500 rounded-2xl w-64 text-white text-lg mt-12 cursor-pointer p-2 disabled:bg-gray-800"
+                onClick={handleFavorite}
+                disabled={isFavorite(cityObj.location.name)}
+              >
+                {isFavorite(cityObj.location.name)
+                  ? " Added to Favorites❤️"
+                  : " Add to Favorites❤️"}
+              </button>
             </div>
 
             {/* Weather Emoji + Temp */}

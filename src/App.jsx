@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import LoaderFullScreen from "./components/LoaderFullScreen";
 import CompareHome from "./pages/CompareHome";
 import { CompareProvider } from "./contexts/CompareContext";
+import { FavoritesProvider } from "./contexts/FavoritesContext";
 //import WeatherCompare from "./pages/WeatherCompare";
 //import SearchHome from "./pages/SearchHome";
 const SearchWeather = lazy(() => import("./pages/SearchWeather"));
@@ -19,18 +20,20 @@ export default function App() {
       <UnitsProvider>
         <WeatherProvider>
           <CompareProvider>
-            <BrowserRouter>
-              <Suspense fallback={<LoaderFullScreen />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/search" element={<SearchHome />} />
-                  <Route path="/weather" element={<SearchWeather />} />
+            <FavoritesProvider>
+              <BrowserRouter>
+                <Suspense fallback={<LoaderFullScreen />}>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/search" element={<SearchHome />} />
+                    <Route path="/weather" element={<SearchWeather />} />
 
-                  <Route path="/compare" element={<CompareHome />} />
-                  <Route path="/cities" element={<WeatherCompare />} />
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
+                    <Route path="/compare" element={<CompareHome />} />
+                    <Route path="/cities" element={<WeatherCompare />} />
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+            </FavoritesProvider>
           </CompareProvider>
         </WeatherProvider>
       </UnitsProvider>

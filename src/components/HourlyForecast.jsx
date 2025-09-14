@@ -61,12 +61,12 @@ function HourlyForecast() {
     <div
       className={` col-start-6 col-end-8 row-span-5 row-start-2 -translate-x-32 h-full max-sm:translate-x-0 max-sm:h-128 max-sm:p-2 max-sm:mb-24  ${
         weather?.current?.is_day === 1 ? " bg-blue-300" : "bg-gray-700"
-      }`}
+      } rounded-2xl mt-4 p-2`}
     >
       <div className="container flex flex-col min-h-0 h-full ">
         <div className="header p-2 flex justify-between items-center  shrink-0">
           <p
-            className={`text-xlfont-bricolage font-bold   ${
+            className={`text-xl font-bricolage font-bold   ${
               weather?.current?.is_day === 1 ? " text-gray-800" : "text-white"
             } `}
           >

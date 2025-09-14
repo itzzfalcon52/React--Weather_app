@@ -263,6 +263,7 @@ function WeatherProvider({ children }) {
         city,
         setCity,
         location,
+        setLocation,
         loadingSearch,
         loadingWeather,
         error,
